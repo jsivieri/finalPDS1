@@ -3,11 +3,13 @@ package com.iftm.courseSpringPDS1.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Entity
 @Table(name = "tb_payment")
 public class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -70,7 +72,4 @@ public class Payment implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-
 }

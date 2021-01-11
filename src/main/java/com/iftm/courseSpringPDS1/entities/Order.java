@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,28 +29,17 @@ public class Order implements Serializable {
 	private Instant moment;
 
 	private Integer orderStatus;
-	
-	@OneToOne
-	@JoinTable(name = "tb_payment",
-			joinColumns = @JoinColumn(name = "order_id"),
-			inverseJoinColumns = @JoinColumn(name = "payment_id"))
-	private Payment payment;
 
-	@ManyToOne
-	@JoinTable(name = "tb_user",
-			joinColumns = @JoinColumn(name = "order_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id"))
-	@JoinColumn(name = "client_id")
-	private User client;
+	@OneToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+	private User user;
 
 	@ManyToMany
-	@JoinTable(name = "tb_order_product", 
-	          joinColumns = @JoinColumn(name = "order_id"),
-	          inverseJoinColumns = @JoinColumn(name = "product_id"))
-	
-	// @OneToMany(mappedBy = "id.order")
+	@JoinTable(name = "tb_order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private Set<Product> products = new HashSet<>();
 
+		
+	private Payment payment;
 
 	public Order() {
 
@@ -62,7 +50,7 @@ public class Order implements Serializable {
 		this.id = id;
 		this.moment = moment;
 		setOrderStatus(orderStatus);
-		this.client = client;
+		this.user = client;
 	}
 
 	public Set<Product> getProducts() {
@@ -79,7 +67,7 @@ public class Order implements Serializable {
 
 	public Double getTotal() {
 		double sum = 0.0;
-		for (Product x :products) {
+		for (Product x : products) {
 			sum += x.getPrice();
 		}
 		return sum;
@@ -103,11 +91,11 @@ public class Order implements Serializable {
 	}
 
 	public User getClient() {
-		return client;
+		return user;
 	}
 
 	public void setClient(User client) {
-		this.client = client;
+		this.user = client;
 
 	}
 

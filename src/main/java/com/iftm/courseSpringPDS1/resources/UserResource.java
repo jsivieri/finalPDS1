@@ -45,10 +45,8 @@ public class UserResource {
 		UserDTO newDto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(newDto.getId()).toUri();
-		return ResponseEntity.created(uri).body(newDto);
-			
+		return ResponseEntity.created(uri).body(newDto);			
 	}
-	
 	
 	
 	@DeleteMapping(value = "/{id}")

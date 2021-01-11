@@ -13,7 +13,7 @@ import com.iftm.courseSpringPDS1.entities.Category;
 import com.iftm.courseSpringPDS1.services.CategoryService;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/categories")
 public class CategoryResource {
 	
 	@Autowired

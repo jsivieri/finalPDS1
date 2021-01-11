@@ -25,26 +25,27 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
+	@Transactional(readOnly = true)
 	public List<UserDTO> findAll() {
 		List<User> list = repository.findAll();
 		return list.stream().map(e -> new UserDTO(e)).collect(Collectors.toList());
 	}
-	
-	
+		
+	@Transactional(readOnly = true)
 	public UserDTO findById(Long id) {
 		Optional<User> obj = repository.findById(id);
 		User entity = obj.orElseThrow(() -> new ResourceNotFoundException(id));
 		return new UserDTO(entity);
-	}
+	}	
 	
-	
-	
+	@Transactional
 	public UserDTO insert(UserInsertDTO dto) {
-		User entity = dto.toEntity();
+		User entity = new User(null, dto.getName(), dto.getEmail(), dto.getPhone(), dto.getPassword());		
 		entity = repository.save(entity);
 		return new UserDTO(entity);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		repository.deleteById(id);
 		try {
@@ -55,9 +56,7 @@ public class UserService {
 			throw new DatabaseException(e.getMessage()); 
 		}
 	}
-	
-	
-	
+		
 	@Transactional
 	public UserDTO update(Long id, UserDTO dto) {
 		try {
