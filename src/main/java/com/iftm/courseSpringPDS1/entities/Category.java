@@ -1,11 +1,14 @@
 package com.iftm.courseSpringPDS1.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,11 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	
+	private Instant createdAt;
+	private Instant updatedAt;
+
+
 
 	public Category() {
 
@@ -44,6 +52,26 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getUpdatedAt() {
+		return updatedAt;
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = Instant.now();
+	}
+
+	@PrePersist
+	public void prePersist() {
+		Instant now = Instant.now();
+		updatedAt = now;
+		createdAt = now;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
